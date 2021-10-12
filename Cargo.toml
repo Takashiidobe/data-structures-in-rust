@@ -1,0 +1,22 @@
+[package]
+name = "min-stack"
+version = "0.0.1"
+edition = "2018"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/takashiidobe/min-stack"
+documentation = "https://docs.rs/min-stack"
+description = "A Min Stack Implementation in Rust"
+
+
+[dependencies]
+man = { version = "0.3.0", optional = true }
+
+[[bin]]
+name = "man"
+path = "src/build.rs"
+required-features = ["build_deps"]
+
+[features]
+build_deps = ["man"]
+
