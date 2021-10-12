@@ -2,7 +2,7 @@ use man::prelude::*;
 use std::fs::File;
 use std::io::{Error, Write};
 
-fn main() -> Result<(), Error> {
+fn min_stack() -> Result<(), Error> {
     let path = "min-stack.1";
     let mut output = File::create(path)?;
 
@@ -12,4 +12,8 @@ fn main() -> Result<(), Error> {
         .render();
 
     write!(output, "{}", msg)
+}
+
+fn main() {
+    min_stack();
 }

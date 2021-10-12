@@ -1,4 +1,6 @@
-# MinStack
+# Rust Data Structures 
+
+## Min-Stack
 
 A Minimum stack in Rust.
 
