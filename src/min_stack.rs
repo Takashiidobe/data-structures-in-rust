@@ -1,12 +1,12 @@
 use std::cmp::min;
 use std::fmt::Debug;
+use std::mem;
 use std::ops::{Deref, DerefMut, Index};
-use std::slice::SliceIndex;
 
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
+#[derive(Default, Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Item<T>
 where
-    T: Clone + PartialEq + Eq + PartialOrd + Ord,
+    T: PartialEq + Eq + PartialOrd + Ord,
 {
     curr: T,
     min: T,
@@ -14,17 +14,41 @@ where
 
 impl<T> Item<T>
 where
-    T: Clone + Ord,
+    T: Ord,
 {
     fn new(curr: T, min: T) -> Self {
         Item { curr, min }
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd)]
-pub struct MinStack<T: Ord + Clone>(Vec<Item<T>>);
+impl<T> MinStack<T>
+where
+    T: Ord + Default + Clone,
+{
+    pub fn append(&mut self, other: &mut Self) {
+        let other = mem::take(other);
+        for item in other {
+            self.push(item.curr);
+        }
+    }
+}
 
-impl<T: Clone + Ord> IntoIterator for MinStack<T> {
+impl<T> Default for MinStack<T>
+where
+    T: Ord,
+{
+    fn default() -> MinStack<T> {
+        MinStack::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd)]
+pub struct MinStack<T: Ord>(Vec<Item<T>>);
+
+impl<T> IntoIterator for MinStack<T>
+where
+    T: Ord,
+{
     type Item = Item<T>;
     type IntoIter = std::vec::IntoIter<Self::Item>;
 
@@ -33,20 +57,29 @@ impl<T: Clone + Ord> IntoIterator for MinStack<T> {
     }
 }
 
-impl<T: Clone + Ord> Deref for MinStack<T> {
+impl<T> Deref for MinStack<T>
+where
+    T: Ord,
+{
     type Target = [Item<T>];
     fn deref(&self) -> &[Item<T>] {
         self.0.deref()
     }
 }
 
-impl<T: Clone + Ord> DerefMut for MinStack<T> {
+impl<T> DerefMut for MinStack<T>
+where
+    T: Ord,
+{
     fn deref_mut(&mut self) -> &mut [Item<T>] {
         self.0.deref_mut()
     }
 }
 
-impl<T: Clone + Ord> From<Vec<T>> for MinStack<T> {
+impl<T> From<Vec<T>> for MinStack<T>
+where
+    T: Clone + Ord,
+{
     fn from(vec: Vec<T>) -> Self {
         let mut stack = MinStack::new();
         for item in vec {
@@ -56,7 +89,10 @@ impl<T: Clone + Ord> From<Vec<T>> for MinStack<T> {
     }
 }
 
-impl<T: Clone + Ord> Index<usize> for MinStack<T> {
+impl<T> Index<usize> for MinStack<T>
+where
+    T: Ord,
+{
     type Output = Item<T>;
 
     fn index(&self, index: usize) -> &Self::Output {
@@ -64,97 +100,83 @@ impl<T: Clone + Ord> Index<usize> for MinStack<T> {
     }
 }
 
-impl<T: Ord + Clone> MinStack<T> {
-    fn new() -> Self {
+impl<T> MinStack<T>
+where
+    T: Clone + Ord,
+{
+    pub fn push(&mut self, item: T) {
+        if !self.0.is_empty() {
+            let curr_min = min(self.peek_min().unwrap(), item.clone());
+            self.0.push(Item::new(item, curr_min));
+        } else {
+            self.0.push(Item::new(item.clone(), item));
+        }
+    }
+
+    pub fn min(&self) -> Option<T> {
+        self.0.last().map(|item| item.clone().min)
+    }
+
+    pub fn peek(&self) -> Option<T> {
+        self.0.last().map(|item| item.clone().curr)
+    }
+
+    pub fn peek_min(&self) -> Option<T> {
+        self.0.last().map(|item| item.clone().min)
+    }
+}
+
+impl<T> MinStack<T>
+where
+    T: Ord,
+{
+    pub fn new() -> Self {
         MinStack(vec![])
     }
 
-    fn as_slice(&self) -> &[Item<T>] {
+    pub fn as_slice(&self) -> &[Item<T>] {
         &self.0
     }
 
-    fn as_ptr(&self) -> *const Item<T> {
-        let ptr = self.0.as_ptr();
-        ptr
+    pub fn as_ptr(&self) -> *const Item<T> {
+        self.0.as_ptr()
     }
 
-    // fn append(&mut self, other: &mut Self) {
-    //     for item in other.into_iter() {
-    //         self.push(item.curr);
-    //     }
-    // }
-
-    fn clear(&mut self) {
-        self.0.clear();
+    pub fn clear(&mut self) {
+        self.0.clear()
     }
 
-    fn with_capacity(capacity: usize) -> MinStack<T> {
+    pub fn with_capacity(capacity: usize) -> MinStack<T> {
         let mut stack = MinStack::new();
         stack.0 = Vec::with_capacity(capacity);
         stack
     }
 
-    fn push(&mut self, item: T) {
-        if !self.0.is_empty() {
-            let curr_min = min(self.min().unwrap(), item.clone());
-            self.0.push(Item::new(item, curr_min));
-        } else {
-            self.0.push(Item::new(item.clone(), item.clone()));
-        }
-    }
-
-    fn reserve(&mut self, additional: usize) {
+    pub fn reserve(&mut self, additional: usize) {
         self.0.reserve(additional)
     }
 
-    fn capacity(&self) -> usize {
+    pub fn capacity(&self) -> usize {
         self.0.capacity()
     }
 
-    fn peek(&self) -> Option<T> {
-        if let Some(curr) = self.0.last() {
-            return Some(curr.curr.clone());
+    pub fn pop(&mut self) -> Option<T> {
+        match self.0.pop() {
+            Some(item) => Some(item.curr),
+            None => None,
         }
-        None
     }
 
-    fn peek_min(&self) -> Option<T> {
-        if let Some(curr) = self.0.last() {
-            return Some(curr.min.clone());
-        }
-        None
-    }
-
-    fn pop(&mut self) -> Option<T> {
-        if let Some(item) = self.0.pop() {
-            return Some(item.curr.clone());
-        }
-        None
-    }
-
-    fn min(&self) -> Option<T> {
-        if let Some(item) = self.0.last() {
-            return Some(item.min.clone());
-        }
-        None
-    }
-
-    // fn get<I>(&self, index: I) -> Option<&I::Output>
-    // where
-    //     I: SliceIndex<Self>,
-    // {
-    //     self.0.get(self)
-    // }
-
-    fn is_empty(&self) -> bool {
+    pub fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
 
-    fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.0.len()
     }
 }
 
+#[macro_export]
 macro_rules! min_stack [
     ($($e:expr),*) => ({
         let mut _temp  = MinStack::new();
@@ -165,7 +187,7 @@ macro_rules! min_stack [
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{Item, MinStack};
 
     #[test]
     fn min_test_1() {
@@ -249,5 +271,55 @@ mod tests {
             [Item::new(1, 1), Item::new(2, 1), Item::new(3, 1)],
             stack.as_slice()
         );
+    }
+
+    #[test]
+    fn append_empty_stack() {
+        let mut left = min_stack![1];
+        let mut right = min_stack![];
+        left.append(&mut right);
+        assert_eq!(left, min_stack![1]);
+        assert_eq!(right, min_stack![]);
+    }
+
+    #[test]
+    fn append_to_empty_stack() {
+        let mut left = min_stack![];
+        let mut right = min_stack![1];
+        left.append(&mut right);
+        assert_eq!(left, min_stack![1]);
+        assert_eq!(right, min_stack![]);
+    }
+
+    #[test]
+    fn append_two_empty_stacks() {
+        let mut left: MinStack<Item<u32>> = min_stack![];
+        let mut right = min_stack![];
+        left.append(&mut right);
+        assert_eq!(left, min_stack![]);
+        assert_eq!(right, min_stack![]);
+    }
+
+    #[test]
+    fn append_two_stacks() {
+        let mut left = min_stack![1];
+        let mut right = min_stack![2];
+        left.append(&mut right);
+        assert_eq!(left, min_stack![1, 2]);
+        assert_eq!(right, min_stack![]);
+    }
+
+    #[test]
+    fn test_eq_stacks_1() {
+        let left = min_stack![1, 2];
+        let right = min_stack![1, 2];
+        assert_eq!(left, right);
+    }
+
+    #[test]
+    fn test_neq_stacks_1() {
+        let left = min_stack![2, 1];
+        let right = min_stack![1, 2];
+        assert_ne!(left, right);
     }
 }
