@@ -1,8 +1,6 @@
-# Rust Data Structures 
+# stdlib-rs 
 
-## Min-Stack
-
-A Minimum stack in Rust.
+A Personal Standard Library for useful hacking.
 
 ## License
 
