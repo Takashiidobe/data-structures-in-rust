@@ -54,8 +54,8 @@ impl<T> IntoIterator for Queue<T> {
 /// Works like the `vec![]` macro.
 /// ## Examples
 /// ```
-/// # use data_structures_in_rust::queue;
-/// # use data_structures_in_rust::queue_with_stack::*;
+/// # use stdlib_rs::queue;
+/// # use stdlib_rs::collections::queue_with_stack::*;
 /// let queue = queue![1, 2, 3];
 /// let empty: Queue<i32> = queue![];
 /// let mut other = Queue::new();

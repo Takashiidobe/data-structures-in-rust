@@ -14,8 +14,8 @@ where
     /// Panics if the number of elements in the `MinStack` overflows a `usize`.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::MinStack;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::MinStack;
     /// let mut left = min_stack![1];
     /// let mut right = min_stack![2];
     /// left.append(&mut right);
@@ -37,8 +37,8 @@ where
     /// If the stack is empty, returns `None`.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::MinStack;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::MinStack;
     /// let stack = min_stack![1, 2];
     /// let empty: MinStack<i32> = min_stack![];
     /// assert_eq!(stack.min(), Some(1));
@@ -52,8 +52,8 @@ where
     /// If the stack is empty, returns `None`.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::MinStack;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::MinStack;
     /// let stack = min_stack![1, 2];
     /// let empty: MinStack<i32> = min_stack![];
     /// assert_eq!(stack.peek(), Some(2));
@@ -66,8 +66,8 @@ where
     /// Adds an item to the end of the stack in O(1) time.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::MinStack;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::MinStack;
     /// let mut stack = min_stack![1];
     /// stack.push(2);
     /// assert_eq!(stack.len(), 2);
@@ -85,8 +85,8 @@ where
     /// Creates a min_stack from a vector.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::MinStack;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::MinStack;
     /// let v = vec![1, 2, 3];
     /// let stack: MinStack<i32> = MinStack::from(v);
     /// assert_eq!(stack, min_stack![1, 2, 3]);
@@ -176,8 +176,8 @@ where
     /// Clears the MinStack, removing all values.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::*;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::*;
     /// let mut stack = min_stack![1,2,3];
     /// stack.clear();
     /// assert_eq!(stack, min_stack![]);
@@ -189,8 +189,8 @@ where
     /// Creates a new MinStack with the given capacity.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::*;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::*;
     /// let stack: MinStack<i32> = MinStack::with_capacity(10);
     /// assert!(stack.capacity() >= 10);
     /// ```
@@ -207,8 +207,8 @@ where
     /// Does nothing if capacity is already sufficient.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::*;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::*;
     /// let mut stack = min_stack![1];
     /// stack.reserve(10);
     /// assert!(stack.capacity() >= 11);
@@ -220,8 +220,8 @@ where
     /// Returns the number of elements the vector can hold without reallocating.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::*;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::*;
     /// let stack: MinStack<i32> = MinStack::with_capacity(10);
     /// assert!(stack.capacity() >= 10);
     /// ```
@@ -232,8 +232,8 @@ where
     /// Removes the last element from a vector and returns it, or `None` if it is empty.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::*;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::*;
     /// let mut stack = min_stack![1, 2, 3];
     /// let mut empty: MinStack<i32> = min_stack![];
     /// assert_eq!(stack.pop(), Some(3));
@@ -249,8 +249,8 @@ where
     /// Returns `true` if the MinStack has no elements.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::*;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::*;
     /// let stack = min_stack![1, 2, 3];
     /// let empty: MinStack<i32> = min_stack![];
     /// assert_eq!(stack.is_empty(), false);
@@ -263,8 +263,8 @@ where
     /// Returns the number of elements in the stack.
     /// ## Examples
     /// ```
-    /// # use data_structures_in_rust::min_stack;
-    /// # use data_structures_in_rust::min_stack::*;
+    /// # use stdlib_rs::min_stack;
+    /// # use stdlib_rs::collections::min_stack::*;
     /// let stack = min_stack![1, 2, 3];
     /// assert_eq!(stack.len(), 3);
     /// ```
@@ -277,8 +277,8 @@ where
 /// Works like the `vec![]` macro.
 /// ## Examples
 /// ```
-/// # use data_structures_in_rust::min_stack;
-/// # use data_structures_in_rust::min_stack::*;
+/// # use stdlib_rs::min_stack;
+/// # use stdlib_rs::collections::min_stack::*;
 /// let stack = min_stack![1, 2, 3];
 /// let empty: MinStack<i32> = min_stack![];
 /// let mut other = MinStack::new();
