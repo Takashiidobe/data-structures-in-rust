@@ -1,9 +1,12 @@
 use std::hash::Hasher;
 
+/// A struct that represents an FNV Hasher.
 pub struct Fnv32Hasher(u32);
+/// A struct that represents an FNV Hasher.
 pub struct Fnv64Hasher(u64);
 
 impl Fnv32Hasher {
+    /// The seed provided to the hasher.
     pub fn seed(seed: u32) -> Fnv32Hasher {
         Fnv32Hasher(seed)
     }
@@ -28,6 +31,7 @@ impl Hasher for Fnv32Hasher {
 }
 
 impl Fnv64Hasher {
+    /// The seed provided to the hasher.
     pub fn seed(seed: u64) -> Fnv64Hasher {
         Fnv64Hasher(seed)
     }
@@ -71,5 +75,11 @@ mod test {
     fn empty() {
         assert_eq!(fnv_64(b""), 14695981039346656037);
         assert_eq!(fnv_32(b""), 2166136261);
+    }
+
+    #[test]
+    fn test_123() {
+        assert_eq!(fnv_64(b"123"), 5003431119771845851);
+        assert_eq!(fnv_32(b"123"), 1916298011);
     }
 }

@@ -6,4 +6,5 @@ pub mod min_stack;
 /// A queue implemented with two stacks.
 pub mod queue_with_stack;
 pub mod second;
+/// A stack implemented with two queues.
 pub mod stack_with_queue;
